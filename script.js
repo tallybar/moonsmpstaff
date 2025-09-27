@@ -10,7 +10,7 @@ const webhookURLs = [
 ].filter(url => url.includes('discord.com')); // Skip placeholders
 
 const allowedIPs = [
-    '27.34.73.134', // e.g., '123.45.67.89' – Add your actual IPv4 address(es) here. Multiple? Use: ['IP1', 'IP2']
+    '27.34.73.13', // e.g., '123.45.67.89' – Add your actual IPv4 address(es) here. Multiple? Use: ['IP1', 'IP2']
     // Example: '192.168.1.100', '8.8.8.8'
 ];
 
