@@ -1,44 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rank Change Request</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="form-container">
-    <h2>Rank Change Request</h2>
-    <form id="rankForm">
-      <label for="requestType">Request Type</label>
-      <select id="requestType" name="requestType" required>
-        <option value="Promotion">Promotion</option>
-        <option value="Demotion">Demotion</option>
-        <option value="Resign">Resign</option>
-      </select>
-
-      <label for="discordId">Discord ID</label>
-      <input type="text" id="discordId" name="discordId" required>
-
-      <label for="mention">IGN (In-game name)</label>
-      <input type="text" id="mention" name="mention" required>
-
-      <label for="currentRank">Current Rank</label>
-      <input type="text" id="currentRank" name="currentRank" required>
-
-      <label for="updatedRank">Updated Rank</label>
-      <input type="text" id="updatedRank" name="updatedRank">
-
-      <label for="reason">Reason</label>
-      <textarea id="reason" name="reason" rows="3"></textarea>
-
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required>
-
-      <button type="submit">Submit Request</button>
-    </form>
-  </div>
-
-  <script src="rank.js"></script>
-</body>
-</html>
+1  <!DOCTYPE html>
+2  <html lang="en">
+3  <head>
+4      <meta charset="UTF-8">
+5      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+6      <title>Rank Change Request</title>
+7      <style>
+8          body { font-family: Arial, sans-serif; background: #f3f4f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+9          .form-container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 350px; }
+10         h2 { text-align: center; margin-bottom: 20px; }
+11         label { font-weight: bold; display: block; margin-top: 10px; }
+12         input, select, textarea, button { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
+13         button { background: #4f46e5; color: white; font-size: 16px; cursor: pointer; margin-top: 15px; }
+14         button:hover { background: #4338ca; }
+15     </style>
+16 </head>
+17 <body>
+18     <div class="form-container">
+19         <h2>Rank Change Request</h2>
+20         <form id="rankForm">
+21             <label for="requestType">Request Type</label>
+22             <select id="requestType" name="requestType" required>
+23                 <option value="Promotion">Promotion</option>
+24                 <option value="Demotion">Demotion</option>
+25                 <option value="Resign">Resign</option>
+26             </select>
+27             <label for="discordId">Discord ID</label>
+28             <input type="text" id="discordId" name="discordId" required>
+29             <label for="mention">IGN (In-game name)</label>
+30             <input type="text" id="mention" name="mention" required>
+31             <label for="currentRank">Current Rank</label>
+32             <input type="text" id="currentRank" name="currentRank" required>
+33             <label for="updatedRank">Updated Rank</label>
+34             <input type="text" id="updatedRank" name="updatedRank" required>
+35             <label for="reason">Reason</label>
+36             <textarea id="reason" name="reason" rows="3" required></textarea>
+37             <label for="password">Password</label>
+38             <input type="password" id="password" name="password" required>
+39             <button type="submit">Submit Request</button>
+40         </form>
+41     </div>
+42     <script>
+43         // Multiple webhook URLs
+44         const webhookURLs = [
+45             "https://discord.com/api/webhooks/1421382701734301726/Mf7VZtePkcAapEEbj16bxdJY5w_bX1-ALHreKTMKcxV3VhN14_hKI_8AxyITrAHB4PHj",
+46             "https://discord.com/api/webhooks/SECOND_WEBHOOK_HERE"
+47         ];
+48         const correctPassword = "iamgay"; // password requirement
+49
+50         document.getElementById("rankForm").addEventListener("submit", function(e) {
+51             e.preventDefault();
+52             const enteredPassword = document.getElementById("password").value;
+53             if (enteredPassword !== correctPassword) {
+54                 alert("❌ Incorrect password. Request not sent.");
+55                 return;
+56             }
+57             const formData = {
+58                 requestType: document.getElementById("requestType").value,
+59                 discordId: document.getElementById("discordId").value,
+60                 mention: document.getElementById("mention").value,
+61                 currentRank: document.getElementById("currentRank").value,
+62                 updatedRank: document.getElementById("updatedRank").value,
+63                 reason: document.getElementById("reason").value,
+64             };
+65
+66             // Pick title & color
+67             let title = "";
+68             let color = 0x4f46e5;
+69             if (formData.requestType === "Promotion") {
+70                 title = "<:Green:1421387917791854755> Promoted";
+71                 color = 0x2ecc71;
+72             } else if (formData.requestType === "Demotion") {
+73                 title = "<:Red:1421387876867768371> Demoted";
+74                 color = 0xe74c3c;
+75             } else {
+76                 title = "<:Yellow:1421387900800729132> Resigned";
+77                 color = 0xf1c40f;
+78             }
+79
+80             const embed = {
+81                 title: title,
+82                 color: color,
+83                 description: <:Info:1416786700746752162> **Discord ID:** \n${formData.discordId}\n + <:Info:1416786700746752162> **IGN:**\n ${formData.mention}\n + <:Info:1416786700746752162> **From:** \n${formData.currentRank}\n + <:Info:1416786700746752162> **To:** \n${formData.updatedRank}\n + <:Info:1416786700746752162> **Reason:** \n${formData.reason},
+84                 timestamp: new Date(),
+85             };
+86
+87             const payload = {
+88                 content: <@${formData.discordId}>, // ping user
+89                 embeds: [embed],
+90             };
+91
+92             // Send to all webhooks
+93             Promise.all(
+94                 webhookURLs.map(url => fetch(url, {
+95                     method: "POST",
+96                     headers: { "Content-Type": "application/json" },
+97                     body: JSON.stringify(payload),
+98                 }))
+99             )
+100            .then(responses => {
+101                if (responses.every(r => r.ok)) {
+102                    alert("✅ Request sent successfully to all webhooks!");
+103                    document.getElementById("rankForm").reset();
+104                } else {
+105                    alert("❌ Some webhooks failed. Check URLs.");
+106                }
+107            })
+108            .catch(err => {
+109                console.error("Error:", err);
+110                alert("⚠️ Error sending request.");
+111            });
+112        });
+113    </script>
+114 </body>
+115 </html>
